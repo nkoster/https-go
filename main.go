@@ -1,7 +1,6 @@
 package main
 
 import (
-	"io"
 	"log"
 	"net/http"
 	"os"
@@ -12,7 +11,8 @@ const httpsPort = "443"
 
 func main() {
 	log.Printf("Web server listening to ports %s and %s\n", httpPort, httpsPort)
-	http.HandleFunc("/", exampleHandler)
+	fs := http.FileServer(http.Dir("./"))
+	http.Handle("/", fs)
 	go func() {
 		if err := http.ListenAndServe(":80", http.HandlerFunc(redirectTLS)); err != nil {
 			log.Fatalf("ListenAndServe error: %v", err)
@@ -30,9 +30,4 @@ func redirectTLS(w http.ResponseWriter, r *http.Request) {
 		log.Fatal(err)
 	}
 	http.Redirect(w, r, "https://"+name, http.StatusMovedPermanently)
-}
-
-func exampleHandler(w http.ResponseWriter, r *http.Request) {
-	w.Header().Add("Content-Type", "application/json")
-	io.WriteString(w, `{"status":"ok"}`)
 }
