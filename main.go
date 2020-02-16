@@ -11,6 +11,9 @@ const httpsPort = "443"
 
 func main() {
 	key, crt, www := args()
+	if key == "" || crt == "" {
+		help()
+	}
 	log.Printf("Web server listening to ports %s and %s\n", httpPort, httpsPort)
 	fs := http.FileServer(http.Dir(www))
 	http.Handle("/", fs)
