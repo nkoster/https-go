@@ -31,9 +31,13 @@ func args() (string, string, string) {
 			arg = ""
 		}
 		if arg == "--help" || arg == "-help" || arg == "/h" {
-			fmt.Printf("usage: %s -crt <certificate file> -key <key file> [-www <path>]]\n", os.Args[0])
-			os.Exit(0)
+			help()
 		}
 	}
 	return key, crt, www
+}
+
+func help() {
+	fmt.Printf("usage: %s -crt <certificate file> -key <key file> [-www <path>]\n", os.Args[0])
+	os.Exit(0)
 }
